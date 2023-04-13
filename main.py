@@ -27,13 +27,19 @@ shifts = [
         ]
 
 
+print("----- condition: 'monday' or 'friday' 'noon' only 1st member necessary")
+print("----- condition: employee:'vaisakh' leave on week:'monday'")
 def condition(week,shift,i):
     con = not((week == 'monday' or week == 'friday') and i==1 and shift=='noon')
     return con
 
 def employee_condition(week,shift,i,employee):
+    con = True 
     con = not(week == 'monday' and employee== 'vaisakh')
     return con
+
+
+
 
 #employees_iter = itertools.cycle(employees)
 employee_stack = []
@@ -43,7 +49,7 @@ class track_employees:
 
     def __init__(self,employees):
         self.employees_list=employees;
-        self.itr = 0;
+        self.itr = -1;
 
     def inc_itr(self):
         self.itr+=1
@@ -55,10 +61,14 @@ class track_employees:
         self.inc_itr()
         emp =''
         for i in list(range(self.itr,len(self.employees_list)))+list(range(0,self.itr)):
+            #print('|n|',end='')
+            #print(employee_condition(week,shift,member_num,self.employees_list[i]),end='')
             if employee_condition(week,shift,member_num,self.employees_list[i]):
                 tmpemp=self.employees_list.pop(i)
-                self.employees_list.insert(i,tmpemp)
+                self.employees_list.insert(self.itr,tmpemp)
                 emp = self.employees_list[self.itr];
+                #print(tmpemp,end='')
+                #print(self.itr,':',i,end='')
                 #print(self.employees_list)
                 break;
         if emp == '' :
@@ -79,6 +89,7 @@ class track_employees:
 # l = list(zip(employees[::2],employees[1::2]))
 # for i in l:
 #     print(i)
+
 te = track_employees(employees)
 
 for week in weeklist:
@@ -87,19 +98,10 @@ for week in weeklist:
         shiftmembers= ''
         for i in range(2):
 
-            # next_emp  = ''
-            # if len(employee_stack) == 0:
-            #     next_emp = next(employees_iter)
-            # else:
-            #     next_emp = employee_stack.pop()
-
-            # if condition(week,shift,i):
             next_emp= te.employee(week,shift,i)
             shiftmembers+=(next_emp+"/")
-            # else:
-            #     employee_stack.append(next_emp)
             
-        print("{:<20}".format(shiftmembers), end = '')
+        print("{:<25}".format(shiftmembers), end = '')
         print(end=' ')
     print()
 
